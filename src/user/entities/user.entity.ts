@@ -22,8 +22,12 @@ export class User {
   @Column('varchar', {
     length: 255,
     select: false,
+    nullable: true,
   })
   password: string;
+
+  @Column({ default: false })
+  isSocialLogin: boolean;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
