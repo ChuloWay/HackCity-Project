@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -15,23 +14,21 @@ export class UserService {
     });
   }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async findOneByEmailQuery(email: string): Promise<User> {
+    return this.userRepository.createQueryBuilder('user').addSelect('user.password').where('user.email = :email', { email }).getOne();
   }
 
-  findAll() {
-    return `This action returns all user`;
-  }
+  async createUser(createUserDTO: CreateUserDto): Promise<User> {
+    const user = new User();
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+    user.email = createUserDTO.email;
+    user.username = createUserDTO.username;
+    user.password = createUserDTO.password;
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+    const userObj = await this.userRepository.save(user);
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    // Remove sensitive data from the user object
+    delete userObj.password;
+    return userObj;
   }
 }
