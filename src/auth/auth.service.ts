@@ -120,7 +120,6 @@ export class AuthService {
 
     // Check if the given password matches the saved password
     const isValid = await this.comparePassword(password, user.password);
-    console.log('data for password here', password, user.password, isValid);
     if (!isValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -170,7 +169,6 @@ export class AuthService {
 
     const user = userToken.user;
 
-    console.log('user here', user);
     user.password = newPassword;
 
     await dataSource.manager.transaction(async (entityManager) => {
@@ -182,5 +180,9 @@ export class AuthService {
     delete user.password;
 
     return user;
+  }
+
+  async logoutUser(user: User) {
+    await this.deleteTokensForUser(user.id);
   }
 }

@@ -25,10 +25,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     let user: User;
 
     if (payload) {
-      const { appName, email } = payload;
+      const { appName, id } = payload;
 
       if (appName === 'HackCity') {
-        user = await this.userService.findOneByEmail(email);
+        user = await this.userService.findUserById(id);
       } else {
         throw new UnauthorizedException('Invalid user in token');
       }

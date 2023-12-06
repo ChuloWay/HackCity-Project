@@ -18,6 +18,7 @@ import { LoginUserDto } from './dto/login-dto';
 import { ForgotPasswordRequestDTO } from './dto/forgot-password.dto';
 import { UserService } from 'src/user/user.service';
 import { ResetPasswordRequestDTO } from './dto/reset-password.dto';
+import { JwtAuthGuard } from './guards/jwt.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -99,6 +100,21 @@ export class AuthController {
         statusCode: HttpStatus.OK,
         data: user,
         message: 'reset password successfully',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  @Post('/logout')
+  @UseGuards(JwtAuthGuard)
+  async logout(@Res() res, @Req() req, @Next() next) {
+    try {
+      const userObject = req.user;
+      await this.authService.logoutUser(userObject);
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        message: 'success',
       });
     } catch (error) {
       next(error);
