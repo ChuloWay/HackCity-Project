@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -38,7 +38,7 @@ export class PostService {
     }
 
     if (post.authorId !== userId) {
-      throw new UnauthorizedException('You are not authorized to edit this post');
+      throw new HttpException('You are not authorized to edit this post', HttpStatus.BAD_REQUEST);
     }
 
     post.title = updatePostDto.title;
