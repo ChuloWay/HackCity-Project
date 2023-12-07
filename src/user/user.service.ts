@@ -25,6 +25,10 @@ export class UserService {
     return this.userRepository.createQueryBuilder('user').addSelect('user.password').where('user.email = :email', { email }).getOne();
   }
 
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.find();
+  }
+
   async createUser(createUserDTO: CreateUserDto): Promise<User> {
     const user = new User();
 

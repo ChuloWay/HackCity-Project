@@ -11,6 +11,7 @@ import { Token } from 'src/user/entities/token.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserModule } from 'src/user/user.module';
+import { AdminDashboardModule } from 'src/admin/admin-dashboard.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserModule } from 'src/user/user.module';
     }),
     TypeOrmModule.forFeature([User, SocialLogin, Token]),
     UserModule,
+    AdminDashboardModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, GoogleStrategy, JwtStrategy, JwtAuthService],
