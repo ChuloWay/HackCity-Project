@@ -1,73 +1,100 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Introduction
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This Content Management System (CMS) is a web application designed to manage and organize content efficiently. Users can sign up, create posts, manage post categories, and admins have access to a real-time dashboard to monitor events within the application.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Project Overview
 
-## Description
+## Technologies Used
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **PostgreSQL:** A powerful open-source relational database management system.
+- **TypeORM:** An Object-Relational Mapping (ORM) library for TypeScript and JavaScript.
+- **WebSockets:** A communication protocol that enables real-time bidirectional communication between clients and servers.
+- **REST Protocol:** Traditional Representational State Transfer for standard HTTP-based communication.
+- **NestJS:** A progressive Node.js framework for building efficient, scalable server-side applications.
 
-## Installation
 
-```bash
-$ npm install
-```
 
-## Running the app
+## Features
 
-```bash
-# development
-$ npm run start
+1. **User Authentication:**
 
-# watch mode
-$ npm run start:dev
+   - Users can sign up and log in securely to access CMS features.
 
-# production mode
-$ npm run start:prod
-```
+2. **Post Management:**
 
-## Test
+   - Create, update, and delete posts.
+   - Organize posts using categories.
 
-```bash
-# unit tests
-$ npm run test
+3. **Category Management:**
 
-# e2e tests
-$ npm run test:e2e
+   - Create, update, and delete post categories.
 
-# test coverage
-$ npm run test:cov
-```
+4. **Admin Dashboard:**
+   - Real-time dashboard for admins to monitor user activities.
+   - Uses WebSockets to provide live updates.
 
-## Support
+## Implementation Details
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+The project is implemented using NodeJS, NestJs, TypeScript, and TypeORM for database interactions. The chosen database is PostGresql.
 
-## Stay in touch
+## Getting Started
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Prerequisites
 
-## License
+Ensure the following packages are installed locally:
 
-Nest is [MIT licensed](LICENSE).
+1. [Postgres](https://www.postgresql.org/download/)
+2. [Node (LTS Version)](https://nodejs.org)
+3. [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+4. NestJS CLI:  `npm install @nestcli -g`
+
+### Setup Steps
+
+1. **Clone the repo**
+
+   ```bash
+   git clone https://github.com/ChuloWay/HackCity-Project
+   ```
+
+2. **Create an env file:**
+
+   - Duplicate the `.env.example` file in the project root.
+   - Rename the duplicated file to `.env`.
+   - Open the `.env` file and set your variables as shown in the example file.
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Ensure to fill in the necessary values in the `.env` file for a smooth configuration.
+
+3. **Run migration:**
+
+   ```bash
+   npm run apply:migration
+   ```
+
+4. **Start your server:**
+
+   ```bash
+   npm run start:dev
+   ```
+
+## API Documentation
+
+Explore the API documentation at - [API Postman Documentation](https://documenter.getpostman.com/view/24154143/2s9YeN3pPV)s.
+
+## Acknowledgements
+
+Special thanks to:
+
+- NestJS
+- TypeScript
+- PostGres
+- TypeORM
+- JSON Web Tokens
+- Websocket
+- PostMan
+
+## Conclusion
+Thank you for exploring our Content Management System! We hope this tool enhances your content management experience. Feel free to provide feedback, report issues, or contribute to the project. Happy managing!
