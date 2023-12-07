@@ -64,7 +64,7 @@ export class CategoryController {
 
   @Delete('/delete/:categoryId')
   @UseGuards(JwtAuthGuard)
-  async deleteCategory(@Param('categoryId') categoryId: string, @Req() req, @Res() res, @Next() next): Promise<Category[]> {
+  async deleteCategory(@Param('categoryId') categoryId: string, @Req() req, @Res() res, @Next() next): Promise<void> {
     try {
       await this.categoryService.delete(categoryId);
       return res.status(HttpStatus.OK).json({
