@@ -39,4 +39,19 @@ export class UserController {
       next(error.message);
     }
   }
+
+  @Get('/all')
+  @UseGuards(JwtAuthGuard)
+  async findAllUsers(@Req() req, @Res() res, @Next() next) {
+    try {
+      const users = await this.userService.findAll();
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        data: users,
+        message: 'success',
+      });
+    } catch (error) {
+      next(error.message);
+    }
+  }
 }
