@@ -7,10 +7,10 @@ import { dataSourceOptions } from './database/dbConfig';
 import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
-import { DashboardModule } from './dashboard/dashboard.module';
+import { AdminDashboardModule } from './admin/admin-dashboard.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(dataSourceOptions), UserModule, AuthModule, PostModule, CategoryModule, DashboardModule],
+  imports: [TypeOrmModule.forRoot(dataSourceOptions), UserModule, AuthModule, PostModule, CategoryModule, AdminDashboardModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -9,10 +9,12 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
 import { LoginUserDto } from './dto/login-dto';
 import { compare } from 'bcryptjs';
-import { UserLoginResponse } from './interface/login.response';
+import { AdminLoginResponse, UserLoginResponse } from './interface/login.response';
 import { Logger } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import dataSource from 'src/database/dbConfig';
+import { CreateAdminDto } from 'src/admin/dto/create.admin.dto';
+import { AdminService } from 'src/admin/admin.service';
 const logger = new Logger('AuthService');
 @Injectable()
 export class AuthService {
@@ -25,6 +27,7 @@ export class AuthService {
     private readonly socialLoginRepository: Repository<SocialLogin>,
     private readonly jwtAuthService: JwtAuthService,
     private readonly userService: UserService,
+    private readonly adminService: AdminService,
   ) {}
 
   private googleLogin(req) {
@@ -184,5 +187,50 @@ export class AuthService {
 
   async logoutUser(user: User) {
     await this.deleteTokensForUser(user.id);
+  }
+
+  /*
+
+  Admin Auth Services
+  */
+
+  async registerAdmin(createAdminDto: CreateAdminDto) {
+    const { email } = createAdminDto;
+
+    const checkEmail = await this.adminService.findOneByEmail(email);
+    if (checkEmail) {
+      throw new HttpException('An account with this email address already exists.', HttpStatus.BAD_REQUEST);
+    }
+
+    return await this.adminService.createAdmin(createAdminDto);
+  }
+
+  async loginAdmin(loginUserDto: LoginUserDto): Promise<AdminLoginResponse> {
+    const { email, password } = loginUserDto;
+
+    const admin = await this.adminService.findOneByEmailQuery(email);
+    if (!admin) {
+      throw new NotFoundException('Email does not exist');
+    }
+
+    // Check if the given password matches the saved password
+    const isValid = await this.comparePassword(password, admin.password);
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const { id } = admin;
+    const data = {
+      id,
+      appName: 'HackCity',
+      email,
+    };
+    // Generate JWT token
+    const accessToken = this.jwtAuthService.createToken(data);
+
+    // Remove sensitive data from the admin object
+    delete admin.password;
+
+    return { admin, token: accessToken };
   }
 }

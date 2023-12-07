@@ -19,6 +19,7 @@ import { ForgotPasswordRequestDTO } from './dto/forgot-password.dto';
 import { UserService } from 'src/user/user.service';
 import { ResetPasswordRequestDTO } from './dto/reset-password.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { CreateAdminDto } from 'src/admin/dto/create.admin.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -35,7 +36,7 @@ export class AuthController {
   }
 
   @Post('/register')
-  async registerIndividual(@Req() req, @Res() res, @Body() body: CreateUserDto, @Next() next) {
+  async registerUser(@Req() req, @Res() res, @Body() body: CreateUserDto, @Next() next) {
     try {
       const user = await this.authService.localRegisterUser(body);
       return res.status(HttpStatus.CREATED).json({
@@ -114,6 +115,34 @@ export class AuthController {
       await this.authService.logoutUser(userObject);
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
+        message: 'success',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  @Post('/register-admin')
+  async registerAdmin(@Req() req, @Res() res, @Body() body: CreateAdminDto, @Next() next) {
+    try {
+      const admin = await this.authService.registerAdmin(body);
+      return res.status(HttpStatus.CREATED).json({
+        statusCode: HttpStatus.OK,
+        data: admin,
+        message: 'success',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  @Post('/login-admin')
+  async loginAdmin(@Body() body: LoginUserDto, @Res() res, @Req() req, @Next() next) {
+    try {
+      const admin = await this.authService.loginAdmin(body);
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        data: admin,
         message: 'success',
       });
     } catch (error) {
