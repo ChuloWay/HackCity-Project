@@ -24,6 +24,21 @@ export class PostController {
     }
   }
 
+  @Get('/single/:postId')
+  @UseGuards(JwtAuthGuard)
+  async findPost(@Param('postId') postId: string, @Req() req, @Res() res, @Next() next) {
+    try {
+      const post = await this.postService.findOnePostById(postId);
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        data: post,
+        message: 'success',
+      });
+    } catch (error) {
+      next(error.message);
+    }
+  }
+
   @Get('/all')
   @UseGuards(JwtAuthGuard)
   async findAllPosts(@Req() req, @Res() res, @Next() next) {
@@ -37,14 +52,31 @@ export class PostController {
     } catch (error) {
       next(error.message);
     }
-    return this.postService.findAll();
+  }
+
+  @Get('/user-posts')
+  @UseGuards(JwtAuthGuard)
+  async findUserPosts(@Req() req, @Res() res, @Next() next) {
+    try {
+      const userObject = req.user;
+      const { id } = userObject;
+      const userPosts = await this.postService.findUserPostsOnly(id);
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        data: userPosts,
+        message: 'success',
+      });
+    } catch (error) {
+      next(error.message);
+    }
   }
 
   @Patch('/update/:postId')
   @UseGuards(JwtAuthGuard)
   async updatePost(@Body() updatePostDto: UpdatePostDto, @Param('postId') postId: string, @Req() req, @Res() res, @Next() next) {
     try {
-      const updatedPost = await this.postService.edit(postId, updatePostDto);
+      const userObject = req.user;
+      const updatedPost = await this.postService.edit(userObject.id, postId, updatePostDto);
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
         data: updatedPost,

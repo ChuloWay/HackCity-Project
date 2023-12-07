@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,11 +30,15 @@ export class PostService {
     return await this.postRepository.save(post);
   }
 
-  async edit(postId: string, updatePostDto: UpdatePostDto): Promise<Post> {
+  async edit(userId: string, postId: string, updatePostDto: UpdatePostDto): Promise<Post> {
     const post = await this.findPostById(postId);
 
     if (!post) {
       throw new NotFoundException('Post not found');
+    }
+
+    if (post.authorId !== userId) {
+      throw new UnauthorizedException('You are not authorized to edit this post');
     }
 
     post.title = updatePostDto.title;
@@ -53,6 +57,22 @@ export class PostService {
 
   async findAll(): Promise<Post[]> {
     return await this.postRepository.find();
+  }
+
+  async findUserPostsOnly(authorId: string): Promise<Post | Post[]> {
+    const userPosts = await this.postRepository.find({ where: { authorId } });
+    if (userPosts && userPosts.length > 0) {
+      return userPosts;
+    } else {
+      return [];
+    }
+  }
+
+  async findOnePostById(postId: string): Promise<Post | null> {
+    const post = await this.postRepository.findOne({
+      where: { id: postId },
+    });
+    return post;
   }
 
   async findPostById(id: string): Promise<Post> {
