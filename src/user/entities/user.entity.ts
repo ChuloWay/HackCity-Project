@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { SocialLogin } from './social-login.entity';
 import * as bcrypt from 'bcryptjs';
 import { Token } from './token.entity';
+import { Post } from 'src/post/entities/post.entity';
 
 @Entity()
 export class User {
@@ -29,10 +30,10 @@ export class User {
   @Column({ default: false })
   isSocialLogin: boolean;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn({ default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
   @OneToMany(() => SocialLogin, (socialLogin) => socialLogin.user, {
@@ -46,6 +47,12 @@ export class User {
     cascade: true,
   })
   tokens: Token[];
+
+  @OneToMany(() => Post, (post) => post.author, {
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
+  posts: Post[];
 
   @BeforeInsert()
   @BeforeUpdate()

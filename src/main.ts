@@ -11,7 +11,7 @@ async function bootstrap() {
 
   await app
     .listen(process.env.PORT || 3500)
-    .then(() => logger.log(`Server started on: localhost:${process.env.PORT}`))
+    .then(() => logger.log(`Server started on: localhost:${process.env.PORT}/api/v1`))
     .catch((err) => {
       logger.error('>>> App error: ', err);
     });
